@@ -1,4 +1,4 @@
-import os
+import os, random
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_jango_project.settings')
 
@@ -42,14 +42,17 @@ def populate():
         p.save()
         return p
 
-    def add_cat(name):
+    def add_cat(name, views, likes):
         c = Category.objects.get_or_create(name=name)[0]
+        c.views = views
+        c.likes = likes
+        c.save()
         return c
 
     for cat, cat_data in cats.items():
-        c = add_cat(cat)
+        c = add_cat(cat, random.randint(30,150), random.randint(0,30))
         for p in cat_data["pages"]:
-            add_page(c, p["title"], p["url"])
+            add_page(c, p["title"], p["url"], random.randint(0,150))
 
     for c in Category.objects.all():
         for p in Page.objects.filter(category=c):
